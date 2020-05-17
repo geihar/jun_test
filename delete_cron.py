@@ -6,6 +6,3 @@ def delete_votes():
 
 
 delete_votes()
-
-
-
