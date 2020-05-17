@@ -61,7 +61,14 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("id", "title", "creation_date", "upvotes", "author", "comment")
+        fields = (
+            "id",
+            "title",
+            "creation_date",
+            "upvotes",
+            "author",
+            "comment",
+        )
 
 
 class CommentsCRUDlSerializer(serializers.ModelSerializer):
@@ -83,6 +90,7 @@ class CreateUpvoteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         upvotes, _ = Upvotes.objects.update_or_create(
-            ip=validated_data.get("ip", None), post=validated_data.get("post", None),
+            ip=validated_data.get("ip", None),
+            post=validated_data.get("post", None),
         )
         return upvotes
