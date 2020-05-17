@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework.views import APIView
+from rest_framework import permissions
 
 from .permissions import IsOwnerOrReadOnly
 from .servises import get_client_ip
@@ -38,18 +39,20 @@ class PostDetailView(generics.RetrieveAPIView):
 class PostCreateView(generics.CreateAPIView):
 
     serializer_class = PostCRUDlSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
 
 class PostUpdateView(generics.UpdateAPIView):
 
+    permission_classes = (IsOwnerOrReadOnly,)
     queryset = Post.objects.all()
-    serializer_class = PostCRUDlSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    serializer_class = PostDetailSerializer
 
 
 class PostDeleteView(generics.DestroyAPIView):
 
     serializer_class = PostCRUDlSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def get_queryset(self):
         queryset = Post.objects.filter(id=self.kwargs["pk"])
@@ -59,17 +62,20 @@ class PostDeleteView(generics.DestroyAPIView):
 class CommentsCreateView(generics.CreateAPIView):
 
     serializer_class = CommentsCRUDlSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
 
 class CommentsUpdateView(generics.UpdateAPIView):
 
     queryset = Comments.objects.all()
     serializer_class = CommentsCRUDlSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
 
 
 class CommentsDeleteView(generics.DestroyAPIView):
 
     serializer_class = CommentsCRUDlSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def get_queryset(self):
         queryset = Comments.objects.filter(id=self.kwargs["pk"])
@@ -87,6 +93,7 @@ class CommentsListView(generics.ListAPIView):
 class AddUpvotes(generics.CreateAPIView):
 
     serializer_class = CreateUpvoteSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(ip=get_client_ip(self.request))

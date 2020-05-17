@@ -74,13 +74,13 @@ class PostDetailSerializer(serializers.ModelSerializer):
 class CommentsCRUDlSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
-        fields = ("__all__",)
+        fields = ("__all__")
 
 
 class PostCRUDlSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ("__all__",)
+        fields = ("__all__")
 
 
 class CreateUpvoteSerializer(serializers.ModelSerializer):
