@@ -7,8 +7,11 @@ class Post(models.Model):
     title = models.CharField(max_length=120)
     url = models.URLField(default="localhost")
     creation_date = models.DateTimeField(auto_now_add=True)
-    upvotes = CustomIntegerField(min_value=0, max_value=100)
+    upvotes = CustomIntegerField(min_value=0, max_value=100, default=0)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["id"]
 
     def __str__(self):
         return self.title
@@ -28,6 +31,9 @@ class Comments(models.Model):
         null=True,
         related_name="children",
     )
+
+    class Meta:
+        ordering = ["id"]
 
 
 class Upvotes(models.Model):

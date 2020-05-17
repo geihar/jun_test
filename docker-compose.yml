@@ -8,3 +8,14 @@ services:
       PGDATA: /var/lib/postgresql/data/pg_data
 
 
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: django:dev
+    restart: unless-stopped
+    command:
+      python manage.py crontab add
+      python manage.py runserver 0.0.0.0:8000 --settings newsBoard.settings.local
+    ports:
+      - 8000:8000

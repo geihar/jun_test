@@ -46,7 +46,7 @@ class PostUpdateView(generics.UpdateAPIView):
 
     permission_classes = (IsOwnerOrReadOnly,)
     queryset = Post.objects.all()
-    serializer_class = PostDetailSerializer
+    serializer_class = PostCRUDlSerializer
 
 
 class PostDeleteView(generics.DestroyAPIView):
@@ -84,6 +84,7 @@ class CommentsDeleteView(generics.DestroyAPIView):
 
 class CommentsListView(generics.ListAPIView):
     serializer_class = CommentsListSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         comments = Comments.objects.all()
@@ -97,8 +98,3 @@ class AddUpvotes(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(ip=get_client_ip(self.request))
-
-
-class DeleteVotes(APIView):
-
-    comments = Upvotes.objects.all().delete()

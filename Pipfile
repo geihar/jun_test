@@ -10,6 +10,9 @@ django = "==3.0.6"
 djangorestframework = "*"
 psycopg2 = "*"
 django-crontab = "*"
+djoser = "*"
+djangorestframework-simplejwt = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.8"
