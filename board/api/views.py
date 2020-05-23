@@ -1,12 +1,11 @@
 from rest_framework import generics
-from rest_framework.views import APIView
 from rest_framework import permissions
 
 from .permissions import IsOwnerOrReadOnly
-from .servises import get_client_ip
+from .services import get_client_ip
 from django.db import models
 
-from ..models import Post, Comments, Upvotes
+from ..models import Post, Comments
 from .serializers import (
     PostListSerializer,
     PostDetailSerializer,
