@@ -13,8 +13,18 @@ docker-compose up -d
 admin: 1234 и
 TestUser: !password1
 
-Postman collections:
+
+Документация:
+
+http://127.0.0.1:8000/swagger/
+
+http://127.0.0.1:8000/redoc/
+
+Документация не в формате Postman Collections:
 https://documenter.getpostman.com/view/9426609/SzmmTuDR?version=latest#intro
+
+
  
 Heroku link:
 https://jun-test-05-20.herokuapp.com/
+

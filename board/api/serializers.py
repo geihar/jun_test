@@ -35,7 +35,7 @@ class CommentsListSerializer(serializers.ModelSerializer):
         )
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -46,7 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PostListSerializer(serializers.ModelSerializer):
 
-    author = UserSerializer(read_only=True)
+    author = AuthorSerializer(read_only=True)
     votes = serializers.IntegerField()
 
     class Meta:
@@ -56,7 +56,7 @@ class PostListSerializer(serializers.ModelSerializer):
 
 class PostDetailSerializer(serializers.ModelSerializer):
 
-    author = UserSerializer(read_only=True)
+    author = AuthorSerializer(read_only=True)
     comment = CommentsSerializer(many=True)
 
     class Meta:

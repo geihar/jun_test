@@ -13,6 +13,7 @@ django-crontab = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
 whitenoise = "*"
+drf-yasg = "*"
 
 [requires]
 python_version = "3.8"
