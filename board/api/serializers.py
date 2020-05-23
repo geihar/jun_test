@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from ..models import Post, Comments, Upvotes
+from ..models import Post, Comment, Upvote
 
 
 class RecursiveSerializer(serializers.Serializer):
@@ -21,13 +21,13 @@ class CommentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         list_serializer_class = FilterCommentsSerializer
-        model = Comments
+        model = Comment
         fields = ("author", "content", "children")
 
 
 class CommentsListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comments
+        model = Comment
         fields = (
             "id",
             "author",
@@ -73,7 +73,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
 class CommentsCRUDlSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comments
+        model = Comment
         fields = ("__all__")
 
 
@@ -85,11 +85,11 @@ class PostCRUDlSerializer(serializers.ModelSerializer):
 
 class CreateUpvoteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Upvotes
+        model = Upvote
         fields = ("post",)
 
     def create(self, validated_data):
-        upvotes, _ = Upvotes.objects.update_or_create(
+        upvotes, _ = Upvote.objects.update_or_create(
             ip=validated_data.get("ip", None),
             post=validated_data.get("post", None),
         )

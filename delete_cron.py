@@ -1,8 +1,8 @@
-from board.models import Upvotes
+from board.models import Upvote
 
 
 def delete_votes():
-    Upvotes.objects.all().delete()
+    Upvote.objects.all().delete()
 
 
 delete_votes()

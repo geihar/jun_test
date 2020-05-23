@@ -1,11 +1,10 @@
 from rest_framework import generics
 from rest_framework import permissions
+from django.db import models
 
 from .permissions import IsOwnerOrReadOnly
 from .services import get_client_ip
-from django.db import models
-
-from ..models import Post, Comments
+from ..models import Post, Comment
 from .serializers import (
     PostListSerializer,
     PostDetailSerializer,
@@ -66,7 +65,7 @@ class CommentsCreateView(generics.CreateAPIView):
 
 class CommentsUpdateView(generics.UpdateAPIView):
 
-    queryset = Comments.objects.all()
+    queryset = Comment.objects.all()
     serializer_class = CommentsCRUDlSerializer
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -77,7 +76,7 @@ class CommentsDeleteView(generics.DestroyAPIView):
     permission_classes = (IsOwnerOrReadOnly,)
 
     def get_queryset(self):
-        queryset = Comments.objects.filter(id=self.kwargs["pk"])
+        queryset = Comment.objects.filter(id=self.kwargs["pk"])
         return queryset
 
 
@@ -86,7 +85,7 @@ class CommentsListView(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        comments = Comments.objects.all()
+        comments = Comment.objects.all()
         return comments
 
 

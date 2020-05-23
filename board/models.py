@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 from .fields import CustomIntegerField
 
 
@@ -10,14 +11,11 @@ class Post(models.Model):
     upvotes = CustomIntegerField(min_value=0, max_value=100, default=0)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    class Meta:
-        ordering = ["id"]
-
     def __str__(self):
         return self.title
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -36,8 +34,8 @@ class Comments(models.Model):
         ordering = ["id"]
 
 
-class Upvotes(models.Model):
-    ip = models.CharField("IP адресс", max_length=15)
+class Upvote(models.Model):
+    ip = models.GenericIPAddressField()
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="post_upvote"
     )
