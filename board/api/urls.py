@@ -3,16 +3,31 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("posts/", views.PostListView.as_view()),
-    path("posts/<int:pk>/", views.PostDetailView.as_view()),
-    path("posts/create/", views.PostCreateView.as_view()),
-    path("posts/update/<int:pk>/", views.PostUpdateView.as_view()),
-    path("posts/delete/<int:pk>/", views.PostDeleteView.as_view()),
-    path("comments/", views.CommentsListView.as_view()),
-    path("comments/create/", views.CommentsCreateView.as_view()),
-    path("comments/update/<int:pk>/", views.CommentsUpdateView.as_view()),
-    path("comments/delete/<int:pk>/", views.CommentsDeleteView.as_view()),
-    path("upvotes/", views.AddUpvotes.as_view()),
+    path("posts/", views.PostViewSet.as_view({"get": "list", "post": "create"})),
+    path(
+        "posts/<int:pk>/",
+        views.PostViewSet.as_view(
+            {
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+    ),
+    path("comments/", views.CommentsViewSet.as_view({"post": "create"})),
+    path(
+        "comments/<int:pk>/",
+        views.CommentsViewSet.as_view(
+            {
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+    ),
+    path("upvotes/", views.AddUpvote.as_view()),
 ]
 #
 #

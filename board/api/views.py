@@ -1,6 +1,8 @@
 from rest_framework import generics
-from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework import permissions, viewsets
 from django.db import models
+
 
 from .permissions import IsOwnerOrReadOnly
 from .services import get_client_ip
@@ -8,89 +10,55 @@ from ..models import Post, Comment
 from .serializers import (
     PostListSerializer,
     PostDetailSerializer,
-    CommentsSerializer,
     CommentsCRUDlSerializer,
     PostCRUDlSerializer,
-    CommentsListSerializer,
     CreateUpvoteSerializer,
 )
 
 
-class PostListView(generics.ListAPIView):
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all().annotate(votes=models.Count(models.F("post_upvote")))
+    serializer_class = PostCRUDlSerializer
 
-    serializer_class = PostListSerializer
-    comments = CommentsSerializer(many=True)
-
-    def get_queryset(self):
-        movies = Post.objects.all().annotate(
+    def list(self, request, *args, **kwargs):
+        queryset = Post.objects.all().annotate(
             votes=models.Count(models.F("post_upvote"))
         )
-        return movies
+        serializer = PostListSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = PostDetailSerializer(instance)
+        return Response(serializer.data)
+
+    def get_permissions(self):
+        if self.action in ['create']:
+            self.permission_classes = [permissions.IsAuthenticated, ]
+        elif self.action in ['update', 'partial_update', ]:
+            self.permission_classes = [IsOwnerOrReadOnly, ]
+        elif self.action in ['destroy']:
+            self.permission_classes = [permissions.IsAdminUser, ]
+        else:
+            self.permission_classes = [permissions.AllowAny, ]
+        return super(self.__class__, self).get_permissions()
 
 
-class PostDetailView(generics.RetrieveAPIView):
-
-    queryset = Post.objects.all()
-    serializer_class = PostDetailSerializer
-
-
-class PostCreateView(generics.CreateAPIView):
-
-    serializer_class = PostCRUDlSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-
-class PostUpdateView(generics.UpdateAPIView):
-
-    permission_classes = (IsOwnerOrReadOnly,)
-    queryset = Post.objects.all()
-    serializer_class = PostCRUDlSerializer
-
-
-class PostDeleteView(generics.DestroyAPIView):
-
-    serializer_class = PostCRUDlSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
-
-    def get_queryset(self):
-        queryset = Post.objects.filter(id=self.kwargs["pk"])
-        return queryset
-
-
-class CommentsCreateView(generics.CreateAPIView):
-
+class CommentsViewSet(viewsets.ModelViewSet):
     serializer_class = CommentsCRUDlSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-
-class CommentsUpdateView(generics.UpdateAPIView):
-
     queryset = Comment.objects.all()
-    serializer_class = CommentsCRUDlSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+
+    def get_permissions(self):
+        if self.action in ['create']:
+            self.permission_classes = [permissions.IsAuthenticated, ]
+        elif self.action in ['update', 'partial_update', 'destroy', ]:
+            self.permission_classes = [IsOwnerOrReadOnly, ]
+        else:
+            self.permission_classes = [permissions.AllowAny, ]
+        return super(self.__class__, self).get_permissions()
 
 
-class CommentsDeleteView(generics.DestroyAPIView):
-
-    serializer_class = CommentsCRUDlSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
-
-    def get_queryset(self):
-        queryset = Comment.objects.filter(id=self.kwargs["pk"])
-        return queryset
-
-
-class CommentsListView(generics.ListAPIView):
-    serializer_class = CommentsListSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get_queryset(self):
-        comments = Comment.objects.all()
-        return comments
-
-
-class AddUpvotes(generics.CreateAPIView):
-
+class AddUpvote(generics.CreateAPIView):
     serializer_class = CreateUpvoteSerializer
     permission_classes = (permissions.IsAuthenticated,)
 

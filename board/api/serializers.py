@@ -25,16 +25,6 @@ class CommentsSerializer(serializers.ModelSerializer):
         fields = ("author", "content", "children")
 
 
-class CommentsListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = (
-            "id",
-            "author",
-            "content",
-        )
-
-
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -72,25 +62,30 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
 
 class CommentsCRUDlSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
+
     class Meta:
         model = Comment
         fields = ("__all__")
+        read_only_fields = ('author',)
 
 
 class PostCRUDlSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
+
     class Meta:
         model = Post
-        fields = ("title", "author")
-
+        fields = ("id", "title", "author")
+        read_only_fields = ('author',)
 
 class CreateUpvoteSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Upvote
         fields = ("post",)
 
     def create(self, validated_data):
         upvotes, _ = Upvote.objects.update_or_create(
-            ip=validated_data.get("ip", None),
-            post=validated_data.get("post", None),
+            ip=validated_data.get("ip", None), post=validated_data.get("post", None),
         )
         return upvotes
