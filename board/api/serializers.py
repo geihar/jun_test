@@ -41,23 +41,33 @@ class PostListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("id", "title", "author", "votes")
+        fields = (
+            "id",
+            "title",
+            "content",
+            "slug",
+            "author",
+            "votes",
+        )
 
 
 class PostDetailSerializer(serializers.ModelSerializer):
 
     author = AuthorSerializer(read_only=True)
     comment = CommentsSerializer(many=True)
+    votes = serializers.IntegerField()
 
     class Meta:
         model = Post
         fields = (
             "id",
             "title",
+            "content",
+            "slug",
             "creation_date",
-            "upvotes",
             "author",
             "comment",
+            "votes",
         )
 
 
@@ -67,7 +77,7 @@ class CommentsCRUDlSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ("__all__")
-        read_only_fields = ('author',)
+        read_only_fields = ("author",)
 
 
 class PostCRUDlSerializer(serializers.ModelSerializer):
@@ -75,11 +85,11 @@ class PostCRUDlSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("id", "title", "author")
-        read_only_fields = ('author',)
+        fields = ("__all__")
+        read_only_fields = ("slug",)
+
 
 class CreateUpvoteSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Upvote
         fields = ("post",)

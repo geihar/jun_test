@@ -52,10 +52,7 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                (
-                    "ip",
-                    models.CharField(max_length=15, verbose_name="IP адресс"),
-                ),
+                ("ip", models.CharField(max_length=15, verbose_name="IP адресс"),),
                 (
                     "post",
                     models.ForeignKey(
