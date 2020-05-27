@@ -6,7 +6,7 @@
 docker-compose up -d
 
 На локальном порте http://127.0.0.1:8000/
-вашей машини розвернется проект и вы можете перейти к тестированию API
+вашей машины розвернется проект и вы можете перейти к тестированию API
 
 
 В вашем роспоряжении 2 пользователя:
@@ -20,7 +20,7 @@ http://127.0.0.1:8000/swagger/
 
 http://127.0.0.1:8000/redoc/
 
-Документация не в формате Postman Collections:
+Документация в формате Postman Collections:
 https://documenter.getpostman.com/view/9426609/SzmmTuDR?version=latest#intro
 
 
