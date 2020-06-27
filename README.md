@@ -21,7 +21,7 @@ http://127.0.0.1:8000/swagger/
 http://127.0.0.1:8000/redoc/
 
 Документация в формате Postman Collections:
-https://documenter.getpostman.com/view/9426609/SzmmTuDR?version=latest#intro
+https://documenter.getpostman.com/view/9426609/SzmmTuDR
 
 
  
