@@ -62,6 +62,9 @@ class CommentsViewSet(viewsets.ModelViewSet):
     serializer_class = CommentsCRUDlSerializer
     queryset = Comment.objects.all()
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
     def get_permissions(self):
         if self.action in ["create"]:
             self.permission_classes = [
